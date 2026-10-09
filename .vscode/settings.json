@@ -1,0 +1,5 @@
+{
+    "mplab.clangd.compileCommandsDir": "${workspaceFolder}\\_build\\Main\\default",
+    "cmake.sourceDirectory": "C:/Users/ethan.lind/OneDrive - Brigham Young University/Fall 2026/Mechatronics/Project Files/Mechatronics-C-code/cmake/Main/default",
+    "C_Cpp.intelliSenseEngine": "disabled"
+}

@@ -1,0 +1,45 @@
+{
+    "version": "1.9",
+    "configurations": [
+        {
+            "name": "default",
+            "id": "",
+            "device": "PIC24F16KA301",
+            "imagePath": "./out/Main/default.elf",
+            "toolProperties": "default-tool-base",
+            "packs": [
+                {
+                    "name": "PIC24F-KA-KL-KM_DFP",
+                    "vendor": "Microchip",
+                    "version": "1.6.395"
+                }
+            ],
+            "fileSet": "default",
+            "toolchain": "default-XC16"
+        }
+    ],
+    "propertyGroups": [
+        {
+            "name": "default-XC16",
+            "type": "toolchain",
+            "provider": "microchip.toolchains:xc16@2.10",
+            "properties": {}
+        },
+        {
+            "name": "default-tool-base",
+            "type": "tool",
+            "properties": {}
+        }
+    ],
+    "fileSets": [
+        {
+            "name": "default",
+            "files": [
+                {
+                    "include": "**/*",
+                    "exclude": "**/@(build|_build|out|cmake|.vscode)/**/*"
+                }
+            ]
+        }
+    ]
+}
