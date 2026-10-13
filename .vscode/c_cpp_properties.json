@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "PIC24F16KA301",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Program Files/Microchip/xc16/v2.10/support/generic/h",
+                "C:/Program Files/Microchip/xc16/v2.10/support/PIC24F/h",
+                "C:/Users/ethan.lind/.mchp_packs/Microchip/PIC24F-KA-KL-KM_DFP/1.6.395/xc16/support/PIC24F/h"
+            ],
+            "defines": [
+                "__XC16__",
+                "__PIC24F16KA301__"
+            ],
+            "compilerPath": "C:/Program Files/Microchip/xc16/v2.10/bin/xc16-gcc.exe",
+            "cStandard": "c99",
+            "intelliSenseMode": "gcc-x86",
+            "compileCommands": [
+                "${workspaceFolder}/_build/Main/default/compile_commands.json"
+            ]
+        }
+    ],
+    "version": 4
+}
