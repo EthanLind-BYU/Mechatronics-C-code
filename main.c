@@ -16,7 +16,7 @@ enum {
     TURNING_RIGHT,
     BALL_PICKUP,
     BALL_DROPOFF,
-    OBSTACLE_AVOIDANCE,
+    CANYON,
     LASER_POINTING,
     IDLE
 } state;
@@ -81,13 +81,15 @@ int main(void)
 
             case LOOKING_FOR_LINE:
                 if (0){
-
+                // main thing that happens in this state
                 }
                 else if (0){
-
+                    //What parameters you need to change to change state
+                    // change state
                 }
                 else {
-
+                    //What parameters you need to change to change state
+                    // change state
                 }
                 break;
 
@@ -97,7 +99,7 @@ int main(void)
 
                 }
                 else if (0){
-
+                    
                 }
                 else {
 
@@ -152,7 +154,7 @@ int main(void)
                 }
                 break;
 
-            case OBSTACLE_AVOIDANCE:
+            case CANYON:
                 if (0){
 
                 }
