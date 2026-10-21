@@ -37,7 +37,12 @@
             "files": [
                 {
                     "include": "**/*",
-                    "exclude": "**/@(build|_build|out|cmake|.vscode)/**/*"
+                    "exclude": [
+                        "**/@(build|_build|out|cmake|.vscode)/**/*",
+                        "main.c",
+                        "driving.c",
+                        "driving.h"
+                    ]
                 }
             ]
         }
