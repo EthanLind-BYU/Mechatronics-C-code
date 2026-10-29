@@ -53,7 +53,8 @@ static void move(int leftDir, int rightDir, unsigned int steps)
 // Steps per inch = 200 / (pi * wheel diameter)
 // For a 3 5/8 wheel: 200 / (3.14159 * 3.625) = 17.56   <-- update when wheel is measured
 
-void accellerate(direction) 
+void accellerate(direction) //intended to avoid missalignement from a quick start. 
+// can be used as a function before changing state.
 {
     LEFT_DIR = direction;
     RIGHT_DIR = direction;
