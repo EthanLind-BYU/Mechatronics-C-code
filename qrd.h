@@ -3,6 +3,9 @@
 #include <xc.h>
 
 #define THRESHOLD 1024
+#define QRDL ADC1BUF0
+#define QRDR ADC1BUF1
+#define QRDM ADC1BUF4
 //#pragma config ICS = PGx3 // For debugging
 //#pragma FNOSC = FRCDIV // 8 MHz w/postscaler
 
