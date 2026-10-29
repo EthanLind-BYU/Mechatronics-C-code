@@ -4,6 +4,7 @@
 #include <xc.h>
 #include "driving.h"
 #include "qrd.h"
+#include "functions.c"
 
 // Configuration bits for the PIC24F16KA301.
 #pragma config FNOSC = FRC      // 8 MHz internal oscillator
@@ -84,30 +85,34 @@ int main(void)
         switch (state){
 
             case LOOKING_FOR_LINE:
-                if (0){
-                // main thing that happens in this state
-                }
-                else if (0){
-                    //What parameters you need to change to change state
-                    // change state
-                }
-                else {
-                    //What parameters you need to change to change state
-                    // change state
+                static bool runACC = 1; //set to accelerate only at the beginning.
+                //distance needs to be measured to assure we won't miss anything in the acceleration
+                if (runACC){
+                    accelerate(1);
+                    runACC = 0;
+                }                
+                
+                // // set it to move straight at max speed.
+                // L_MOTOR = 10000;
+                // static LEFT_DIR = 1;//only runs once, if ran again direction must be set as it changes statess (if needed)
+                // L_DC = L_MOTOR/2; // set duty cycle to 50
+                // R_MOTOR = 10000;
+                // static RIGHT_DIR = 1; // ditto from above
+                // R_DC = R_MOTOR/2; //set duty cycle to 50
+
+
+                // the past code might be unnecessary because of the accelerate function
+                    
+                else if (QRDL >= THRESHOLD && QRDR >= THRESHOLD){
+                    turn_left();
+                    accelerate(1); // speed up to begin line following
+                    state = LINE_FOLLOWING; //change state
                 }
                 break;
 
             
             case LINE_FOLLOWING:
-                if (0){
-
-                }
-                else if (0){a
-                    
-                }
-                else {
-
-                }
+                line_follow_check();
                 break;
 
             case TURNING_LEFT:
