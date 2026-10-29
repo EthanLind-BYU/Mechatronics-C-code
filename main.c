@@ -3,6 +3,7 @@
 
 #include <xc.h>
 #include "driving.h"
+#include "qrd.h"
 
 // Configuration bits for the PIC24F16KA301.
 #pragma config FNOSC = FRC      // 8 MHz internal oscillator
