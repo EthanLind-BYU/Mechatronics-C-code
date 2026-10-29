@@ -9,8 +9,10 @@
 #define LEFT_DIR   _LATB4
 #define RIGHT_DIR  _LATA4
 #define DISABLE    _LATB0     // high = motors off
-#DEFINE L_MOTOR OC2RS    // Set to control speed of the left motor
-#DEFINE R_MOTOR OC3RS    // Set to control the speed of the right motor
+#define L_MOTOR OC2RS    // Set to control speed of the left motor
+#define L_DC OC2R
+#define R_MOTOR OC3RS    // Set to control the speed of the right motor
+#define R_DC OC3R
 
 // Call once at the start of main
 void motors_init(void)
