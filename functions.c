@@ -53,6 +53,17 @@ static void move(int leftDir, int rightDir, unsigned int steps)
 // Steps per inch = 200 / (pi * wheel diameter)
 // For a 3 5/8 wheel: 200 / (3.14159 * 3.625) = 17.56   <-- update when wheel is measured
 
+void accellerate(direction) 
+{
+    LEFT_DIR = direction;
+    RIGHT_DIR = direction;
+    int PWM = 40000; //sets PWM to start slow
+    while (PWM > 10000) {
+        PWM = PWM - 10;
+    }
+    PWM = 10000;
+}
+
 void drive_forward(float inches)
 {
     move(1, 1, (unsigned int)(inches * 17.56));
