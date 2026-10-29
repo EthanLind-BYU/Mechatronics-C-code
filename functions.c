@@ -6,9 +6,11 @@
 #define PWM_PERIOD  10000
 
 // ---- Pins ----
-#define LEFT_DIR   _LATA0
-#define RIGHT_DIR  _LATA1
+#define LEFT_DIR   _LATB4
+#define RIGHT_DIR  _LATA4
 #define DISABLE    _LATB0     // high = motors off
+#DEFINE L_MOTOR OC2RS    // Set to control speed of the left motor
+#DEFINE R_MOTOR OC3RS    // Set to control the speed of the right motor
 
 // Call once at the start of main
 void motors_init(void)
@@ -53,28 +55,28 @@ static void move(int leftDir, int rightDir, unsigned int steps)
 
 void drive_forward(float inches)
 {
-    move(1, 0, (unsigned int)(inches * 17.56));
+    move(1, 1, (unsigned int)(inches * 17.56));
 }
 
 void drive_backward(float inches)
 {
-    move(0, 1, (unsigned int)(inches * 17.56));
+    move(0, 0, (unsigned int)(inches * 17.56));
 }
 
 // 90 deg turn: (pi * distance_between wheels / 4) * 
 // (3.14159 * 10.35 / 4) * 17.56 = 143 steps   <-- tune on the floor
 void turn_left(void)    // left wheel back, right wheel forward
 {
-    move(0, 0, 143);
+    move(0, 1, 143);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
-    move(1, 1, 143);
+    move(1, 0, 143);
 }
 
 void turn_180(void) {
-    move(1, 1, 286);
+    move(1, 0, 286);
 }
 
 void pick_up_ball(void)
