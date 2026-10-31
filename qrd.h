@@ -52,9 +52,9 @@ int main()
     // Configure analog pin 3 (AN1 is shared with RA1)
     _TRISA1 = 1;    // Set as input (for  right QRD)
     _ANSA1 = 1;     // Enable pin 3 for analog input (recall setting this 0 enables digital input).    
-    // Configure analog pin 4 (AN2 is shared with RA4)
-    _TRISB0 = 1;    // Set as input (for middle QRD)
-    _ANSB0 = 1;     // Enable pin 4 for analog input (recall setting this 0 enables digital input).    
+    // Configure analog pin 6 (AN2 is shared with RA4)
+    _TRISB2 = 1;    // Set as input (for middle QRD)
+    _ANSB2 = 1;     // Enable pin 6 for analog input (recall setting this 0 enables digital input).    
     // Configure analog pin 15 (AN12 is shared with RA)
     _TRISB12 = 1;    // Set as input (for the ping pong ball collor)
     _ANSB12 = 1;     // Enable pin 15 for analog input (recall setting this 0 enables digital input).    
