@@ -4,8 +4,8 @@
 #include <xc.h>
 #include "driving.h"
 #include "qrd.h"
-#include "functions.c"
-
+#include "functions.h"
+#include "lineFollow.h"
 // Configuration bits for the PIC24F16KA301.
 #pragma config FNOSC = FRC      // 8 MHz internal oscillator
 #pragma config POSCMOD = NONE   // No external crystal, frees RA2/RA3 for I/O
@@ -85,7 +85,7 @@ int main(void)
         switch (state){
 
             case LOOKING_FOR_LINE:
-                static bool runACC = 1; //set to accelerate only at the beginning.
+                static runACC = 1; //set to accelerate only at the beginning.
                 //distance needs to be measured to assure we won't miss anything in the acceleration
                 if (runACC){
                     accelerate(1);
