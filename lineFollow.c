@@ -1,12 +1,17 @@
 #include <xc.h>
 #include "functions.h"
 #include "interrupts.h"
+#include "lineFollow.h"
 
 static int FAST = 10000;// Max speed PWM
 static int MEDIUM = 12000;
 static int SLOW = 18000;
 
 enum {STRAIGHT, GO_RIGHT, GO_LEFT};
+int PATH = STRAIGHT;
+
+
+
 
 void line_follow_check() {
   if (QRDR >= THRESHOLD) // checks if the right QRD sees the line
@@ -24,40 +29,42 @@ void line_follow_check() {
   else { //sets it to straight since none of the other sides are seen.
     PATH = STRAIGHT;
   }
-}
+    
 switch (PATH) {
-  case STRAIGHT:
-    L_MOTOR = FAST;
-    L_DC = L_MOTOR/2;
-    R_MOTOR = FAST;
-    R_DC = L_MOTOR/2;
-    break;
-  case GO_RIGHT:
-    if (QRDM > THRESHOLD && QRDR > THRESHOLD){
-      R_MOTOR = MEDIUM;
-      R_DC = R_MOTOR/2;
+    case STRAIGHT:
       L_MOTOR = FAST;
       L_DC = L_MOTOR/2;
-    }
-    else if (QRDM <= THRESHOLD && QRDR > THRESHOLD){
-      R_MOTOR = SLOW;
-      R_DC = R_MOTOR/2;
-      L_MOTOR = FAST;
-      L_DC = L_MOTOR/2;
-    }
-    break;
-  case GO_LEFT:
-    if (QRDM > THRESHOLD && QRDL > THRESHOLD){
       R_MOTOR = FAST;
-      R_DC = R_MOTOR/2;
-      L_MOTOR = MEDIUM;
-      L_DC = L_MOTOR/2;
-    }
-    else if (QRDM <= THRESHOLD && QRDL > THRESHOLD){
-      R_MOTOR = FAST;
-      R_DC = R_MOTOR/2;
-      L_MOTOR = SLOW;
-      L_DC = L_MOTOR/2;
-    }
-    break;
+      R_DC = L_MOTOR/2;
+      break;
+    case GO_RIGHT:
+      if (QRDM > THRESHOLD && QRDR > THRESHOLD){
+        R_MOTOR = MEDIUM;
+        R_DC = R_MOTOR/2;
+        L_MOTOR = FAST;
+        L_DC = L_MOTOR/2;
+      }
+      else if (QRDM <= THRESHOLD && QRDR > THRESHOLD){
+        R_MOTOR = SLOW;
+        R_DC = R_MOTOR/2;
+        L_MOTOR = FAST;
+        L_DC = L_MOTOR/2;
+      }
+      break;
+    case GO_LEFT:
+      if (QRDM > THRESHOLD && QRDL > THRESHOLD){
+        R_MOTOR = FAST;
+        R_DC = R_MOTOR/2;
+        L_MOTOR = MEDIUM;
+        L_DC = L_MOTOR/2;
+      }
+      else if (QRDM <= THRESHOLD && QRDL > THRESHOLD){
+        R_MOTOR = FAST;
+        R_DC = R_MOTOR/2;
+        L_MOTOR = SLOW;
+        L_DC = L_MOTOR/2;
+      }
+      break;
+  }
+
 }
