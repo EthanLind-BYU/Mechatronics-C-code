@@ -2,6 +2,7 @@
 #include "functions.h"
 #include "interrupts.h"
 #include "lineFollow.h"
+#include "qrd.h"
 
 static int FAST = 10000;// Max speed PWM
 static int MEDIUM = 12000;
@@ -21,10 +22,6 @@ void line_follow_check() {
   else if (QRDL >= THRESHOLD) // checks if the left qrd sees the line.
     {
       PATH = GO_LEFT;
-    }
-  else if (QRDL >= THRESHOLD && QRDM >= THRESHOLD && QRDR >= THRESHOLD) // checks for the end of the line 
-    {
-      state = CANYON;
     }
   else { //sets it to straight since none of the other sides are seen.
     PATH = STRAIGHT;
