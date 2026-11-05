@@ -39,6 +39,9 @@ int main(void)
     TRISB = 0;
     ANSA = 0;
     ANSB = 0;
+
+    // Initiallize all pins, pwm, and inturrupts used for the stepper motors
+    motors_init();
     
     // CONFIGURE TIMERS
     // Timer 1
