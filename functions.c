@@ -67,30 +67,33 @@ void accellerate(direction) //intended to avoid missalignement from a quick star
     PWM = 10000;
 }
 
+// Steps per inch = 200 / (pi * wheel diameter)
+// For a 3 5/8 wheel: 200 / (3.14159 * 3.625) = 37.38   <-- update when wheel is measured
+
 void drive_forward(float inches)
 {
-    move(1, 1, (unsigned int)(inches * 17.56));
+    move(1, 0, (unsigned int)(inches * 35.124));
 }
 
 void drive_backward(float inches)
 {
-    move(0, 0, (unsigned int)(inches * 17.56));
+    move(0, 1, (unsigned int)(inches * 35.124));
 }
 
-// 90 deg turn: (pi * distance_between wheels / 4) * 
-// (3.14159 * 10.35 / 4) * 17.56 = 143 steps   <-- tune on the floor
+// 90 deg turn: (pi * distance_between wheels / 4)
+// (3.14159 * 10.75 / 4) * 37.38 = 400 steps   <-- tune on the floor
 void turn_left(void)    // left wheel back, right wheel forward
 {
-    move(0, 1, 143);
+    move(0, 0, 297);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
-    move(1, 0, 143);
+    move(1, 1, 297);
 }
 
 void turn_180(void) {
-    move(1, 0, 286);
+    move(1, 1, 593);
 }
 
 void pick_up_ball(void)
@@ -102,9 +105,8 @@ void pick_up_ball(void)
 }
 
 void basic_mobility_milestone(void) {
-    drive_forward(5);
+    drive_forward(36);
     turn_right();
-    drive_forward(5);
+    drive_forward(36);
     turn_180();
-    drive_forward(5);
-}
+    drive_forward(36);

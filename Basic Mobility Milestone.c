@@ -10,12 +10,18 @@
 #include "functions.h"
 
 #pragma config FNOSC = FRCDIV // Selecting 8 MHz Oscillator
+#pragma config POSCMOD = NONE   // No external crystal, frees RA2/RA3 for I/O
+#pragma config OSCIOFNC = OFF   // RA3 is normal I/O instead of clock output
+#pragma config SOSCSRC = DIG    // RA4/RB4 usable as digital I/O
+#pragma config FWDTEN = OFF     // Watchdog off, otherwise the chip resets itself periodically
+
 
 #define startStop _RA2
 
 enum {
     IDLE,
     MILESTONE
+    
 } state;
 
 int main(void) {
@@ -32,7 +38,7 @@ int main(void) {
    
     // Initiallize all pins, pwm, and inturrupts used for the stepper motors
     motors_init();
-
+    
     // Set Pin 7 to be the start / stop pin
     _TRISA2 = 1;
 
