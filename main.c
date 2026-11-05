@@ -6,6 +6,7 @@
 #include "qrd.h"
 #include "functions.h"
 #include "lineFollow.h"
+#include "interrupts.h"
 // Configuration bits for the PIC24F16KA301.
 #pragma config FNOSC = FRC      // 8 MHz internal oscillator
 #pragma config POSCMOD = NONE   // No external crystal, frees RA2/RA3 for I/O
@@ -60,32 +61,40 @@ int main(void)
 
     // TURN ON PWM
     // OC1 as edge-aligned PWM, clocked from Fcy (4 MHz), period set by OC1RS
-    OC1CON1 = 0;
-    OC1CON2 = 0;
-    OC1CON1bits.OCTSEL = 0b111; // Select main oscillator (Fcy) as clock source
-    OC1CON2bits.SYNCSEL = 0x1F; // Self-sync: OC1RS sets the period
-    OC1CON1bits.OCM = 0b110;    // Edge-aligned PWM
+    OC3CON1 = 0;
+    OC3CON2 = 0;
+    OC2CON1 = 0;
+    OC2CON2 = 0;
+    OC3CON1bits.OCTSEL = 0b111; // Select main oscillator (Fcy) as clock source
+    OC3CON2bits.SYNCSEL = 0x1F; // Self-sync: OC3RS sets the period
+    OC3CON1bits.OCM = 0b110;    // Edge-aligned PWM
+    OC2CON1bits.OCTSEL = 0b111; // Select main oscillator (Fcy) as clock source
+    OC2CON2bits.SYNCSEL = 0x1F; // Self-sync: OC3RS sets the period
+    OC2CON1bits.OCM = 0b110;    // Edge-aligned PWM
 
     // CONFIGURE INTERUPTS
     // Output Compare 1: (Pin 14)
     _OC1IP = 4; // Select the interrupt priority
-    _OC1IE = 1; // Enable the OC2 interrupt
+//    _OC1IE = 1; // Enable the OC2 interrupt
     _OC1IF = 0; // Clear the interrupt flag
     //  Output Compare 2: 
     _OC2IP = 4; // Select the interrupt priority
-    _OC2IE = 1; // Enable the OC2 interrupt
+//    _OC2IE = 1; // Enable the OC2 interrupt
     _OC2IF = 0; // Clear the interrupt flag
 
-
+    qrd_int();// function for setup of the QRDs
 
     // Initialize the state
     state = LOOKING_FOR_LINE;
-
+    int runACC = 1; //set to accelerate only at the beginning.
+    L_MOTOR = 10000;
+    L_DC = L_MOTOR/2;
+    R_MOTOR = 10000;
+    R_DC = R_MOTOR/2;
     while (1) {
         switch (state){
 
             case LOOKING_FOR_LINE:
-                static runACC = 1; //set to accelerate only at the beginning.
                 //distance needs to be measured to assure we won't miss anything in the acceleration
                 if (runACC){
                     accelerate(1);
@@ -112,7 +121,11 @@ int main(void)
 
             
             case LINE_FOLLOWING:
-                line_follow_check();
+//                line_follow_check();
+//                  if (QRDL >= THRESHOLD && QRDM >= THRESHOLD && QRDR >= THRESHOLD) // checks for the end of the line 
+//                    {
+//                      state = CANYON;
+//                    }
                 break;
 
             case TURNING_LEFT:
