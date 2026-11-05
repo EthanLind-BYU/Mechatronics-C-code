@@ -2,31 +2,28 @@
 #include "functions.h"
 #include "interrupts.h"
 
-// ---- Speed: 2 rev/s = 400 steps/s -> 4,000,000 / 400 ----
-#define PWM_PERIOD  10000
-
-// ---- Pins ----
 #define LEFT_DIR   _LATB4
 #define RIGHT_DIR  _LATA4
-#define DISABLE    _LATB0     // high = motors off
-#define L_MOTOR OC2RS    // Set to control speed of the left motor
-#define L_DC OC2R
-#define R_MOTOR OC3RS    // Set to control the speed of the right motor
+#define DISABLE _LATB0     // high = motors off
+#define L_MOTOR OC2RS    // Set to control speed pin 4 to the left motor
+#define L_DC OC2R       
+#define R_MOTOR OC3RS    // Set to control the speed pin 5 to the right motor
 #define R_DC OC3R
+
+// ---- Speed: 2 rev/s = 400 steps/s -> 4,000,000 / 400 ----
+#define PWM_PERIOD  10000
 
 // Call once at the start of main
 void motors_init(void)
 {
     ANSA = 0;
-    _TRISA0 = 0;   // Left DIR
-    _TRISA1 = 0;   // Right DIR
-    _TRISB0 = 0;   // Disable (both motors)
-    _TRISA6 = 0;   // Pin 14, PWM to both STEP pins
+    _TRISA4 = 0;   // Left DIR
+    _TRISB4 = 0;   // Right DIR
+    _TRISB0 = 0;   // Pin 4, PWM to both STEP pins
+    _TRISB1 = 0;   // Pin 5, PWM to both STEP pins
 
     OC1CON1 = 0x1C06;
     OC1CON2 = 0x001F;
-    OC1RS = PWM_PERIOD;
-    OC1R = 0;          // start stopped             ----------------------------CHECK HERE-------------
 
     _OC1IP = 4;
     _OC1IF = 0;
@@ -55,7 +52,7 @@ static void move(int leftDir, int rightDir, unsigned int steps)
 // Steps per inch = 200 / (pi * wheel diameter)
 // For a 3 5/8 wheel: 200 / (3.14159 * 3.625) = 17.56   <-- update when wheel is measured
 
-void accellerate(direction) //intended to avoid missalignement from a quick start. 
+void accelerate(int direction) //intended to avoid misalignment from a quick start. 
 // can be used as a function before changing state.
 {
     LEFT_DIR = direction;
@@ -67,33 +64,30 @@ void accellerate(direction) //intended to avoid missalignement from a quick star
     PWM = 10000;
 }
 
-// Steps per inch = 200 / (pi * wheel diameter)
-// For a 3 5/8 wheel: 200 / (3.14159 * 3.625) = 37.38   <-- update when wheel is measured
-
 void drive_forward(float inches)
 {
-    move(1, 0, (unsigned int)(inches * 35.124));
+    move(1, 1, (unsigned int)(inches * 17.56));
 }
 
 void drive_backward(float inches)
 {
-    move(0, 1, (unsigned int)(inches * 35.124));
+    move(0, 0, (unsigned int)(inches * 17.56));
 }
 
-// 90 deg turn: (pi * distance_between wheels / 4)
-// (3.14159 * 10.75 / 4) * 37.38 = 400 steps   <-- tune on the floor
+// 90 deg turn: (pi * distance_between wheels / 4) * 
+// (3.14159 * 10.35 / 4) * 17.56 = 143 steps   <-- tune on the floor
 void turn_left(void)    // left wheel back, right wheel forward
 {
-    move(0, 0, 297);
+    move(0, 1, 143);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
-    move(1, 1, 297);
+    move(1, 0, 143);
 }
 
 void turn_180(void) {
-    move(1, 1, 593);
+    move(1, 0, 286);
 }
 
 void pick_up_ball(void)
@@ -105,8 +99,9 @@ void pick_up_ball(void)
 }
 
 void basic_mobility_milestone(void) {
-    drive_forward(36);
+    drive_forward(5);
     turn_right();
-    drive_forward(36);
+    drive_forward(5);
     turn_180();
-    drive_forward(36);
+    drive_forward(5);
+}
