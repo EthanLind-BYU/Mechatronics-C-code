@@ -2,7 +2,6 @@
 
 
 #include <xc.h>
-#include "driving.h"
 #include "qrd.h"
 #include "functions.h"
 #include "lineFollow.h"
@@ -41,7 +40,8 @@ int main(void)
     ANSA = 0;
     ANSB = 0;
 
-    // Initiallize all pins, pwm, and inturrupts used for the stepper motors
+    // Initiallize all pins, pwm (OC2 pin 4, OC3 pin 5), and inturrupts used for the stepper motors.
+    // Motors start stopped (0% duty).
     motors_init();
     
     // CONFIGURE TIMERS
@@ -58,32 +58,11 @@ int main(void)
     // Timer 5
 
    
-    // Turn on PWM for pin14
-    // OC1CON1 = 0x1C06; 
+    // Stepper PWM (OC2, OC3) and the OC2 step-counting interrupt are configured in motors_init()
+
+    // Turn on PWM for pin14 (OC1 = servo, not set up yet)
+    // OC1CON1 = 0x1C06;
     // OC1CON2 = 0x001F;
-
-    // TURN ON PWM
-    // OC1 as edge-aligned PWM, clocked from Fcy (4 MHz), period set by OC1RS
-    OC3CON1 = 0;
-    OC3CON2 = 0;
-    OC2CON1 = 0;
-    OC2CON2 = 0;
-    OC3CON1bits.OCTSEL = 0b111; // Select main oscillator (Fcy) as clock source
-    OC3CON2bits.SYNCSEL = 0x1F; // Self-sync: OC3RS sets the period
-    OC3CON1bits.OCM = 0b110;    // Edge-aligned PWM
-    OC2CON1bits.OCTSEL = 0b111; // Select main oscillator (Fcy) as clock source
-    OC2CON2bits.SYNCSEL = 0x1F; // Self-sync: OC3RS sets the period
-    OC2CON1bits.OCM = 0b110;    // Edge-aligned PWM
-
-    // CONFIGURE INTERUPTS
-    // Output Compare 1: (Pin 14)
-    _OC1IP = 4; // Select the interrupt priority
-//    _OC1IE = 1; // Enable the OC2 interrupt
-    _OC1IF = 0; // Clear the interrupt flag
-    //  Output Compare 2: 
-    _OC2IP = 4; // Select the interrupt priority
-//    _OC2IE = 1; // Enable the OC2 interrupt
-    _OC2IF = 0; // Clear the interrupt flag
 
     qrd_int();// function for setup of the QRDs
 

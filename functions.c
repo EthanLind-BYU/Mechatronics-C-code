@@ -2,37 +2,47 @@
 #include "functions.h"
 #include "interrupts.h"
 
-#define LEFT_DIR   _LATB4
-#define RIGHT_DIR  _LATA4
-#define DISABLE _LATB0     // high = motors off
-#define L_MOTOR OC2RS    // Set to control speed pin 4 to the left motor
-#define L_DC OC2R       
-#define R_MOTOR OC3RS    // Set to control the speed pin 5 to the right motor
-#define R_DC OC3R
-
-// ---- Speed: 2 rev/s = 400 steps/s -> 4,000,000 / 400 ----
-#define PWM_PERIOD  10000
-
 // Call once at the start of main
 void motors_init(void)
 {
-    ANSA = 0;
-    _TRISA4 = 0;   // Left DIR
-    _TRISB4 = 0;   // Right DIR
-    _TRISB0 = 0;   // Pin 4, PWM to both STEP pins
-    _TRISB1 = 0;   // Pin 5, PWM to both STEP pins
+    // Pins 4 and 5 (RB0/RB1) can also be analog inputs (AN2/AN3), so make them digital
+    _ANSB0 = 0;
+    _ANSB1 = 0;
 
-    OC1CON1 = 0x1C06;
-    OC1CON2 = 0x001F;
+    _TRISB4 = 0;   // Pin 9,  Left DIR
+    _TRISA4 = 0;   // Pin 10, Right DIR
+    _TRISB0 = 0;   // Pin 4,  OC2 PWM -> Left STEP
+    _TRISB1 = 0;   // Pin 5,  OC3 PWM -> Right STEP
 
-    _OC1IP = 4;
-    _OC1IF = 0;
-    _OC1IE = 0;
+    // OC2 (left) and OC3 (right): edge-aligned PWM clocked from Fcy (4 MHz).
+    // Each one is self-synced, so OCxRS (L_MOTOR / R_MOTOR) sets its own period.
+    OC2CON1 = 0;
+    OC2CON2 = 0;
+    OC3CON1 = 0;
+    OC3CON2 = 0;
 
-    DISABLE = 0;       // motors on (but Duty Cycle is still 0% until move() changes that)
+    L_MOTOR = PWM_PERIOD;
+    R_MOTOR = PWM_PERIOD;
+    L_DC = 0;      // 0% duty = start stopped
+    R_DC = 0;
+
+    OC2CON1bits.OCTSEL = 0b111;  // Clock source = Fcy
+    OC2CON2bits.SYNCSEL = 0x1F;  // Self-sync: OC2RS sets the period
+    OC2CON1bits.OCM = 0b110;     // Edge-aligned PWM
+    OC3CON1bits.OCTSEL = 0b111;  // Clock source = Fcy
+    OC3CON2bits.SYNCSEL = 0x1F;  // Self-sync: OC3RS sets the period
+    OC3CON1bits.OCM = 0b110;     // Edge-aligned PWM
+
+    // The OC2 interrupt fires once per step and counts steps for move().
+    // Only move() turns it on.
+    _OC2IP = 4;
+    _OC2IF = 0;
+    _OC2IE = 0;
 }
 
-// The code cycles through the move function until the OC1 interrupt says the steps are done.
+// The code waits in move() until the OC2 interrupt says the steps are done.
+// Both wheels run at PWM_PERIOD so they take the same number of steps, which means
+// counting only the left motor (OC2) is enough.
 static void move(int leftDir, int rightDir, unsigned int steps)
 {
     LEFT_DIR = leftDir;
@@ -42,11 +52,16 @@ static void move(int leftDir, int rightDir, unsigned int steps)
     stepsToTake = steps;
     moveDone = 0;
 
-    _OC1IF = 0;
-    _OC1IE = 1;
-    OC1R = PWM_PERIOD / 2;   // 50% duty = start stepping
+    // Line following may have left the wheels at different speeds, so reset both
+    L_MOTOR = PWM_PERIOD;
+    R_MOTOR = PWM_PERIOD;
 
-    while (!moveDone) { }    // wait for the interrupt to finish the move
+    _OC2IF = 0;
+    _OC2IE = 1;
+    L_DC = PWM_PERIOD / 2;   // 50% duty = start stepping
+    R_DC = PWM_PERIOD / 2;
+
+    while (!moveDone) { }    // wait for the interrupt to finish the move (it stops both motors)
 }
 
 // Steps per inch = 200 / (pi * wheel diameter)
@@ -74,7 +89,7 @@ void drive_backward(float inches)
     move(0, 0, (unsigned int)(inches * 17.56));
 }
 
-// 90 deg turn: (pi * distance_between wheels / 4) * 
+// 90 deg turn: (pi * distance_between wheels / 4) *
 // (3.14159 * 10.35 / 4) * 17.56 = 143 steps   <-- tune on the floor
 void turn_left(void)    // left wheel back, right wheel forward
 {

@@ -39,9 +39,7 @@
                     "include": "**/*",
                     "exclude": [
                         "**/@(build|_build|out|cmake|.vscode)/**/*",
-                        "main.c",
-                        "driving.c",
-                        "driving.h"
+                        "Basic Mobility Milestone.c"
                     ]
                 }
             ]

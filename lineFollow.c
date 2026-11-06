@@ -32,7 +32,7 @@ switch (PATH) {
       L_MOTOR = FAST;
       L_DC = L_MOTOR/2;
       R_MOTOR = FAST;
-      R_DC = L_MOTOR/2;
+      R_DC = R_MOTOR/2;
       break;
     case GO_RIGHT:
       if (QRDM > THRESHOLD && QRDR > THRESHOLD){
