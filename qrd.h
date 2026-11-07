@@ -3,9 +3,9 @@
 #include <xc.h>
 #ifndef QRD_H
 #define QRD_H
-#define THRESHOLD 1024
+#define THRESHOLD 2000
 #define QRDL ADC1BUF0
-#define QRDR ADC1BUF1
-#define QRDM ADC1BUF4
+#define QRDR ADC1BUF4
+#define QRDM ADC1BUF1
 void qrd_int(void);
 #endif
