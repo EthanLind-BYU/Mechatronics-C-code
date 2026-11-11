@@ -6,6 +6,7 @@
 #include "functions.h"
 #include "lineFollow.h"
 #include "interrupts.h"
+#include "canyon.h"
 // Configuration bits for the PIC24F16KA301.
 #pragma config FNOSC = FRC      // 8 MHz internal oscillator
 #pragma config POSCMOD = NONE   // No external crystal, frees RA2/RA3 for I/O
@@ -40,10 +41,19 @@ int main(void)
     ANSA = 0;
     ANSB = 0;
 
-    // Initiallize all pins, pwm (OC2 pin 4, OC3 pin 5), and inturrupts used for the stepper motors.
-    // Motors start stopped (0% duty).
+    // Initiallize motor pins: 
+    // pwm (OC2 pin 4, OC3 pin 5)
+    // interrupts used for the stepper motors.
     motors_init();
+
+    // Initiallize canyon pins:
+    // Digital input on RB7 (pin 11), RB8 (pin 12), RB9 (pin 13)
+    canyon_init();
     
+    // Setup of the QRDs
+    qrd_int();
+
+
     // CONFIGURE TIMERS
     // Timer 1
     _TON = 1; // Timer ON
@@ -63,8 +73,6 @@ int main(void)
     // Turn on PWM for pin14 (OC1 = servo, not set up yet)
     // OC1CON1 = 0x1C06;
     // OC1CON2 = 0x001F;
-
-    qrd_int();// function for setup of the QRDs
 
     // Initialize the state
     state = LOOKING_FOR_LINE;
@@ -103,11 +111,11 @@ int main(void)
 
             
             case LINE_FOLLOWING:
-//                line_follow_check();
-//                  if (QRDL >= THRESHOLD && QRDM >= THRESHOLD && QRDR >= THRESHOLD) // checks for the end of the line 
-//                    {
-//                      state = CANYON;
-//                    }
+               line_follow_check();
+                 if (QRDL >= THRESHOLD && QRDM >= THRESHOLD && QRDR >= THRESHOLD) // checks for the end of the line 
+                   {
+                     state = CANYON;
+                   }
                 break;
 
             case TURNING_LEFT:
@@ -159,14 +167,14 @@ int main(void)
                 break;
 
             case CANYON:
-                if (0){
-
-                }
-                else if (0){
-
+                if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD) {// checks for the start of the line 
+                    drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
+                    turn_right();
+                    accelerate(1); // set both wheels forward again
+                    state = LINE_FOLLOWING;
                 }
                 else {
-
+                    canyon_check();
                 }
                 break;
 
