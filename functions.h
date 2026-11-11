@@ -25,6 +25,5 @@ void drive_backward(float inches);
 void turn_180(void);
 void pick_up_ball(void);
 void basic_mobility_milestone(void);
-void accelerate(int direction);
 
 #endif
