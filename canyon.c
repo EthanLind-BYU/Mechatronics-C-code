@@ -17,36 +17,36 @@ void canyon_init(void)
 void canyon_check(void)
 {
 
-    // // Check the state of the sensors
-    // if (FRONT == 0 && LEFT == 0) { // Front and left sensors triggered
-    //     turn_right();
-    // }
-    // if (FRONT == 0 && RIGHT == 0) { // Front and right sensors triggered
-    //     turn_left();
-    // }
-    // if (RIGHT == 0) { // Right sensor triggered
-    //     drive_forward(1); // Move forward along right wall
-    // }
-    // if (LEFT == 0) { // Left sensor triggered
-    //     drive_forward(1); // Move forward along left wall
-    // }
-    // if (RIGHT == 0) && (LEFT == 0) { // Both side sensors triggered
-    //     drive_forward(1); // Move forward in the canyon
-    // }
-
-
-    if (FRONT_WALL == 0) {        // nothing ahead: drive straight
-        LEFT_DIR = 1;            // turn_left/right leave these reversed
-        RIGHT_DIR = 1;
-        L_MOTOR = PWM_PERIOD;
-        R_MOTOR = PWM_PERIOD;
-        L_DC = PWM_PERIOD / 2;
-        R_DC = PWM_PERIOD / 2;
-    }
-    else if (LEFT_WALL == 0) {       // wall ahead, left open
-        turn_left();
-    }
-    else if (RIGHT_WALL == 0) {      // wall ahead, right open
+    // Check the state of the sensors
+    if (FRONT_WALL == 0 && LEFT_WALL == 0) { // Front and left sensors triggered
         turn_right();
     }
+    if (FRONT_WALL == 0 && RIGHT_WALL == 0) { // Front and right sensors triggered
+        turn_left();
+    }
+    if (RIGHT_WALL == 0) { // Right sensor triggered
+        drive_forward(1); // Move forward along right wall
+    }
+    if (LEFT_WALL == 0) { // Left sensor triggered
+        drive_forward(1); // Move forward along left wall
+    }
+    if (RIGHT_WALL == 0 && LEFT_WALL == 0) { // Both side sensors triggered
+        drive_forward(1); // Move forward in the canyon
+    }
+
+
+    // if (FRONT_WALL == 0) {        // nothing ahead: drive straight
+    //     LEFT_DIR = 1;            // turn_left/right leave these reversed
+    //     RIGHT_DIR = 1;
+    //     L_MOTOR = PWM_PERIOD;
+    //     R_MOTOR = PWM_PERIOD;
+    //     L_DC = PWM_PERIOD / 2;
+    //     R_DC = PWM_PERIOD / 2;
+    // }
+    // else if (LEFT_WALL == 0) {       // wall ahead, left open
+    //     turn_left();
+    // }
+    // else if (RIGHT_WALL == 0) {      // wall ahead, right open
+    //     turn_right();
+    // }
 }
