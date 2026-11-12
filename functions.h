@@ -15,7 +15,7 @@
 #define R_DC       OC3R    // Right motor duty cycle (0 = stopped, R_MOTOR/2 = running)
 
 // ---- Speed: 2 rev/s = 400 steps/s -> 4,000,000 / 400 ----
-#define PWM_PERIOD  10000
+#define PWM_PERIOD  15000
 
 void motors_init(void);
 void turn_left(void);

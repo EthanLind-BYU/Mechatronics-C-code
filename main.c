@@ -177,6 +177,7 @@ int main(void)
                     drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
                     turn_left();
                     accelerate(1); // set both wheels forward again
+                    state = LINE_FOLLOWING;
                 }
                 else {
                     canyon_check();

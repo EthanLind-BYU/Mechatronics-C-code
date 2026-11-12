@@ -35,18 +35,20 @@ void canyon_check(void)
     }
 
 
-    // if (FRONT_WALL == 0) {        // nothing ahead: drive straight
-    //     LEFT_DIR = 1;            // turn_left/right leave these reversed
-    //     RIGHT_DIR = 1;
-    //     L_MOTOR = PWM_PERIOD;
-    //     R_MOTOR = PWM_PERIOD;
-    //     L_DC = PWM_PERIOD / 2;
-    //     R_DC = PWM_PERIOD / 2;
-    // }
-    // else if (LEFT_WALL == 0) {       // wall ahead, left open
-    //     turn_left();
-    // }
-    // else if (RIGHT_WALL == 0) {      // wall ahead, right open
-    //     turn_right();
-    // }
+    if (FRONT_WALL == 0) {        // nothing ahead: drive straight
+        LEFT_DIR = 1;            // turn_left/right leave these reversed
+        RIGHT_DIR = 1;
+        L_MOTOR = PWM_PERIOD;
+        R_MOTOR = PWM_PERIOD;
+        L_DC = PWM_PERIOD / 2;
+        R_DC = PWM_PERIOD / 2;
+    }
+    else if (LEFT_WALL == 0) {       // wall ahead, left open
+        drive_forward(5); // Move forward along left wall
+        turn_left();
+    }
+    else if (RIGHT_WALL == 0) {      // wall ahead, right open
+        drive_forward(5); // Move forward along right wall
+        turn_right();
+    }
 }
