@@ -17,22 +17,22 @@ void canyon_init(void)
 void canyon_check(void)
 {
 
-    // Check the state of the sensors
-    if (FRONT_WALL == 0 && LEFT_WALL == 0) { // Front and left sensors triggered
-        turn_right();
-    }
-    if (FRONT_WALL == 0 && RIGHT_WALL == 0) { // Front and right sensors triggered
-        turn_left();
-    }
-    if (RIGHT_WALL == 0) { // Right sensor triggered
-        drive_forward(1); // Move forward along right wall
-    }
-    if (LEFT_WALL == 0) { // Left sensor triggered
-        drive_forward(1); // Move forward along left wall
-    }
-    if (RIGHT_WALL == 0 && LEFT_WALL == 0) { // Both side sensors triggered
-        drive_forward(1); // Move forward in the canyon
-    }
+    // // Check the state of the sensors
+    // if (FRONT_WALL == 0 && LEFT_WALL == 0) { // Front and left sensors triggered
+    //     turn_right();
+    // }
+    // if (FRONT_WALL == 0 && RIGHT_WALL == 0) { // Front and right sensors triggered
+    //     turn_left();
+    // }
+    // if (RIGHT_WALL == 0) { // Right sensor triggered
+    //     drive_forward(1); // Move forward along right wall
+    // }
+    // if (LEFT_WALL == 0) { // Left sensor triggered
+    //     drive_forward(1); // Move forward along left wall
+    // }
+    // if (RIGHT_WALL == 0 && LEFT_WALL == 0) { // Both side sensors triggered
+    //     drive_forward(1); // Move forward in the canyon
+    // }
 
 
     if (FRONT_WALL == 0) {        // nothing ahead: drive straight
