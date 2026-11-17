@@ -5,7 +5,7 @@
 #include "qrd.h"
 
 static unsigned int FAST = 5000;// Max speed PWM
-static unsigned int MEDIUM = 15000;
+//static unsigned int MEDIUM = 15000;
 static unsigned int SLOW = 60000;
 enum {STRAIGHT, SLOW_RIGHT, FAST_RIGHT, SLOW_LEFT, FAST_LEFT, STOP};
 int PATH = STRAIGHT;
@@ -45,31 +45,31 @@ switch (PATH) {
         R_DC = R_MOTOR/2;
         L_MOTOR = FAST;
         L_DC = L_MOTOR/2;
-        if (QRDM > THRESHOLD) {PATH = FAST_RIGHT;}
+//        if (QRDM > THRESHOLD) {PATH = FAST_RIGHT;}
         if (QRDL < THRESHOLD) {PATH = STRAIGHT;}
       break;
-    case FAST_RIGHT:
-        R_MOTOR = SLOW;
-        R_DC = R_MOTOR/2;
-        L_MOTOR = FAST;
-        L_DC = L_MOTOR/2;
-        if (QRDM < THRESHOLD) {PATH = STRAIGHT;}
-      break;
+//    case FAST_RIGHT:
+//        R_MOTOR = SLOW;
+//        R_DC = R_MOTOR/2;
+//        L_MOTOR = FAST;
+//        L_DC = L_MOTOR/2;
+//        if (QRDM < THRESHOLD) {PATH = STRAIGHT;}
+//      break;
     case SLOW_LEFT:
         R_MOTOR = FAST;
         R_DC = R_MOTOR/2;
         L_MOTOR = SLOW;
         L_DC = L_MOTOR/2;
-        if (QRDM > THRESHOLD) {PATH = FAST_LEFT;}
+//        if (QRDM > THRESHOLD) {PATH = FAST_LEFT;}
         if (QRDR < THRESHOLD) {PATH = STRAIGHT;}
       break;
-    case FAST_LEFT:
-        R_MOTOR = FAST;
-        R_DC = R_MOTOR/2;
-        L_MOTOR = SLOW;
-        L_DC = L_MOTOR/2;
-        if (QRDM < THRESHOLD) {PATH = SLOW_LEFT;}
-      break;
+//    case FAST_LEFT:
+//        R_MOTOR = FAST;
+//        R_DC = R_MOTOR/2;
+//        L_MOTOR = SLOW;
+//        L_DC = L_MOTOR/2;
+//        if (QRDM < THRESHOLD) {PATH = SLOW_LEFT;}
+//      break;
     case STOP:
         R_DC = 0;
         L_DC = 0;
