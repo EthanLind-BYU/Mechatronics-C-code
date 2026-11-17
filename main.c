@@ -92,7 +92,7 @@ int main(void)
                    {
                      state = CANYON;
                    }
-               if (BALL_SENSOR > 1) {
+               if (BALL_SENSOR) {
                    pick_up_ball();
                }
                if (RIGHT_WALL && LEFT_WALL && !ball_dropped){
@@ -135,7 +135,7 @@ int main(void)
                     servo_angle(ANGLE+1);
                 }
                 else if (LASER_SENSOR){
-                    //set laser to be on (might have to have it repeat in the IDLE state)
+                    LASER = 1;//set laser to be on (might have to have it repeat in the IDLE state)
                     state = IDLE;
                 }
                 break;
