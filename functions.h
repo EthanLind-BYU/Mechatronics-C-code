@@ -23,6 +23,7 @@
 #define PWM_PERIOD  7500 // controls speed in canyon,and any other move functions
 #define BALL_SENSOR PORTBbits.RB14 //setup for pin 17 
 #define LASER_SENSOR PORTAbits.RA2 //setup for pin 7
+#define LASER LATAbits.LATA3 //pin 8 setup to power laser
 
 
 void motors_init(void);
