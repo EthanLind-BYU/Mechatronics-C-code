@@ -4,8 +4,10 @@
 #ifndef QRD_H
 #define QRD_H
 #define THRESHOLD 2500
-#define QRDL ADC1BUF0
-#define QRDR ADC1BUF4
-#define QRDM ADC1BUF1 
-void qrd_int(void);
+#define QRDL ADC1BUF0 //pin2
+#define QRDR ADC1BUF4 //pin6
+#define QRDM ADC1BUF1 //pin3
+#define QRDB ADC1BUF12 //pin15
+#define QRDE ADC1BUF9 //pin18
+void qrd_init(void);
 #endif
