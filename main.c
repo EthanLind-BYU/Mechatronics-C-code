@@ -66,21 +66,25 @@ int main(void)
 
     // Initialize the state
     state = LOOKING_FOR_LINE;
-    accelerate(1);
+    accelerate(1,1,7500);//sets to forward and the a speed of 7500
     static int ball_dropped = 0;
+    static int ball_recieved = 0;
 
+
+   
     while (1) {
         switch (state){
 
             case LOOKING_FOR_LINE:
-                L_MOTOR = 3000;
-                R_MOTOR = 3000;
+                L_MOTOR = 7500;
+                R_MOTOR = 7500;
                 L_DC = L_MOTOR/2;
                 R_DC = R_MOTOR/2;
-                if (QRDL >= THRESHOLD && QRDR >= THRESHOLD && QRDM >= THRESHOLD){
-                    drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
+                if (QRDL >= THRESHOLD && QRDR >= THRESHOLD && QRDM >= THRESHOLD)
+                {
+                    drive_forward(1); // align the line from the qrd sensors to wheel "axle"
                     turn_left();
-                    accelerate(1); // set both wheels forward again
+                    accelerate(1,1,7500); // set both wheels forward again
                     state = LINE_FOLLOWING;
                 }
                 break;
@@ -92,37 +96,37 @@ int main(void)
                    {
                      state = CANYON;
                    }
-               if (BALL_SENSOR) {
-                   pick_up_ball();
-               }
-               if (RIGHT_WALL && LEFT_WALL && !ball_dropped){
-                   ball_drop();
-                   ball_dropped = 1;
-               }
-               if (QRDE > THRESHOLD)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
-               {
-                   drive_forward(2);
-                   turn_right();
-                   accelerate(0);
-                   drive_backward(21);
-                   servo_angle(0);
-                   state = LASER_POINTING;
-                   
-               }
+//               if (BALL_SENSOR && !ball_recieved) {
+//                   pick_up_ball();
+//                   ball_recieved = 1;
+//               }
+//               if (RIGHT_WALL && LEFT_WALL && !ball_dropped){
+//                   ball_drop();
+//                   ball_dropped = 1;
+//               }
+//               if (QRDE > THRESHOLD)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
+//               {
+//                   drive_forward(2);
+//                   turn_right();
+//                   accelerate(0,0,7500);
+//                   drive_backward(21);
+//                   servo_angle(0);
+//                   state = LASER_POINTING;
+//                   
+//               }
                break;
 
             case CANYON:
                 if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && LEFT_WALL == 1) {// checks for the start of the line 
                     drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
                     turn_right();
-                    accelerate(1); // set both wheels forward again
+                    accelerate(1,1,5000); // set both wheels forward again
                     state = LINE_FOLLOWING;
                 }
                 else if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && RIGHT_WALL == 1) {// checks for the start of the line 
                     drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
                     turn_left();
-                    accelerate(1); // set both wheels forward again
-                    
+                    accelerate(1,1,5000); // set both wheels forward again
                     state = LINE_FOLLOWING;
                 }
                 else {
