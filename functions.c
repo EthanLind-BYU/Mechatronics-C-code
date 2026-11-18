@@ -70,16 +70,25 @@ static void move(int leftDir, int rightDir, unsigned int steps)
 // Steps per inch = 200 / (pi * wheel diameter)
 // For a 3 5/8 wheel: 200 / (3.14159 * 3.625) = 17.56   <-- update when wheel is measured
 
-void accelerate(int direction) //intended to avoid misalignment from a quick start. 
+void accelerate(int left, int right, int pwm_input) //intended to avoid misalignment from a quick start. 
 // can be used as a function before changing state.
 {
-    LEFT_DIR = direction;
-    RIGHT_DIR = direction;
-//    int PWM = 40000; //sets PWM to start slow
-//    while (PWM > 10000) {
-//        PWM = PWM - 10;
-//    }
-//    PWM = 10000;
+    L_DC = 0;
+    R_DC = 0;
+    for (volatile long i = 0; i < 20000; i++);
+    LEFT_DIR = left;
+    RIGHT_DIR = right;
+    unsigned int PWM = 65000; //sets PWM to start slow
+    while (PWM > pwm_input) {
+        PWM = PWM - 1;
+        L_MOTOR = PWM;
+        R_MOTOR = PWM;
+        L_DC = PWM/2;
+        R_DC = PWM/2;
+        int t=0;
+        for (volatile long i = 0; i < 4000; i++);
+    }
+    PWM = 10000;
 }
 
 void drive_forward(float inches)
@@ -120,11 +129,13 @@ void servo_angle(int angle)
 // (3.14159 * 10.35 / 4) * 17.56 = 143 steps   <-- tune on the floor
 void turn_left(void)    // left wheel back, right wheel forward
 {
+    accelerate(0,1,10000);
     move(0, 1, 143);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
+    accelerate(1,0,10000);
     move(1, 0, 143);
 }
 
