@@ -13,9 +13,18 @@
 #define L_DC       OC2R    // Left motor duty cycle (0 = stopped, L_MOTOR/2 = running)
 #define R_MOTOR    OC3RS   // Right motor period (sets speed, bigger = slower)
 #define R_DC       OC3R    // Right motor duty cycle (0 = stopped, R_MOTOR/2 = running)
+#define SERVO      OC1RS   // Servo Motor PWM on pin 14
+#define ANGLE      OC1R    // Servo Motor Anle
 
-// ---- Speed: 2 rev/s = 400 steps/s -> 4,000,000 / 400 ----
-#define PWM_PERIOD  15000
+// for the servo motors and angles, to get the 20ms suggestion for PWM, we would need a postscalor
+// so we can try to figure out how to get the postscaler to apply to just this, or make all of our other numbers smaller as well.
+
+//Speed: 2 rev/s = 400 steps/s -> 4,000,000 / 400 
+#define PWM_PERIOD  15000 // controls speed in canyon,and any other move functions
+#define BALL_SENSOR PORTBbits.RB14 //setup for pin 17 
+#define LASER_SENSOR PORTAbits.RA2 //setup for pin 7
+#define LASER LATAbits.LATA3 //pin 8 setup to power laser
+
 
 void motors_init(void);
 void turn_left(void);
@@ -26,5 +35,8 @@ void turn_180(void);
 void pick_up_ball(void);
 void basic_mobility_milestone(void);
 void accelerate(int direction);
+void servo_angle(int angle);
+//void laser_search(void);
+void ball_drop(void);
 
 #endif

@@ -34,12 +34,13 @@ void config_ad(void)
                   // period TAD
     _ADCS = 0b00000011;    // AD1CON3<7:0> -- TAD needs to be at least 600 ns. Thus, _ADCS = 0b00000010 will give us the fastest AD clock given a 4 MHz system clock. 0b00000011 is slower than we could go, but still fast enough for our needs.
 
-    AD1CSSL = 0b1000000010011; //chooses with A2D channels you are going to scan (here we chose 12 for ball and 1,2,4 for line following)
+    AD1CSSL = 0b1001000010011; //chooses with A2D channels you are going to scan 
+    //here we chose 12 for ball and 1,2,4 for line following and 9 for the last line detection
     _ADON = 1;    // AD1CON1<15> -- Turn on A/D
 
 }
 
-void qrd_int(void)
+void qrd_init(void)
 {    
     // Configure analog pin 
     // Configure analog pin 2 (AN0 is shared with RA0)
@@ -51,9 +52,12 @@ void qrd_int(void)
     // Configure analog pin 6 (AN2 is shared with RA4)
     _TRISB2 = 1;    // Set as input (for middle QRD)
     _ANSB2 = 1;     // Enable pin 6 for analog input (recall setting this 0 enables digital input).    
-    // Configure analog pin 15 (AN12 is shared with RA)
-    _TRISB12 = 1;    // Set as input (for the ping pong ball collor)
+    // Configure analog pin 15 (AN12 is shared with RB12)
+    _TRISB12 = 1;    // Set as input (for the ping pong ball color)
     _ANSB12 = 1;     // Enable pin 15 for analog input (recall setting this 0 enables digital input).    
+   // Configure analog pin 18 (AN9 is shared with RB15)
+    _TRISB15 = 1;    // Set as input (for the end line detection)
+    _ANSB15 = 1;     // Enable pin 18 for analog input (recall setting this 0 enables digital input).
 
     config_ad();    // Configure A/D
 

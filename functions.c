@@ -1,6 +1,8 @@
 #include <xc.h>
 #include "functions.h"
 #include "interrupts.h"
+#include "qrd.h"
+
 
 // Call once at the start of main
 void motors_init(void)
@@ -25,6 +27,7 @@ void motors_init(void)
     R_MOTOR = PWM_PERIOD;
     L_DC = 0;      // 0% duty = start stopped
     R_DC = 0;
+    
 
     OC2CON1bits.OCTSEL = 0b111;  // Clock source = Fcy
     OC2CON2bits.SYNCSEL = 0x1F;  // Self-sync: OC2RS sets the period
@@ -67,14 +70,23 @@ static void move(int leftDir, int rightDir, unsigned int steps)
 // Steps per inch = 200 / (pi * wheel diameter)
 // For a 3 5/8 wheel: 200 / (3.14159 * 3.625) = 17.56   <-- update when wheel is measured
 
-void accelerate(int direction) //intended to avoid misalignment from a quick start. 
+void accelerate(int left, int right, int pwm_input) //intended to avoid misalignment from a quick start. 
 // can be used as a function before changing state.
 {
-    LEFT_DIR = direction;
-    RIGHT_DIR = direction;
-    int PWM = 40000; //sets PWM to start slow
-    while (PWM > 10000) {
-        PWM = PWM - 10;
+    L_DC = 0;
+    R_DC = 0;
+    for (volatile long i = 0; i < 20000; i++);
+    LEFT_DIR = left;
+    RIGHT_DIR = right;
+    unsigned int PWM = 65000; //sets PWM to start slow
+    while (PWM > pwm_input) {
+        PWM = PWM - 1;
+        L_MOTOR = PWM;
+        R_MOTOR = PWM;
+        L_DC = PWM/2;
+        R_DC = PWM/2;
+        int t=0;
+        for (volatile long i = 0; i < 4000; i++);
     }
     PWM = 10000;
 }
@@ -89,34 +101,88 @@ void drive_backward(float inches)
     move(0, 0, (unsigned int)(inches * 17.56));
 }
 
+void servo_angle(int angle) 
+{
+    while (ANGLE != angle){
+        if (ANGLE > angle){
+            ANGLE--;
+        }
+        if (ANGLE < angle){
+            ANGLE++;
+        }
+        int DELAY = 0;
+        while (DELAY != 1000){
+            DELAY++;
+        }
+    }
+}
+
+//void laser_search(void) {
+//    int angle = ANGLE+1;
+//    if (LASER_SENSOR){
+//        servo_angle(angle);
+//        angle +=1;
+//    }
+//}
+
 // 90 deg turn: (pi * distance_between wheels / 4) *
 // (3.14159 * 10.35 / 4) * 17.56 = 143 steps   <-- tune on the floor
 void turn_left(void)    // left wheel back, right wheel forward
 {
+    accelerate(0,1,10000);
     move(0, 1, 315);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
+    accelerate(1,0,10000);
     move(1, 0, 300);
 }
 
-void turn_180(void) {
+void turn_180(void) 
+{
     move(1, 0, 286);
 }
 
 void pick_up_ball(void)
 {
+    int delay = 0;
     turn_right();
     drive_forward(5);
+    while (delay<65000)// wait for the ball to drop
+    {
+        delay++;
+    }
     drive_backward(5);
     turn_left();
 }
 
-void basic_mobility_milestone(void) {
-    drive_forward(5);
-    turn_right();
-    drive_forward(5);
-    turn_180();
-    drive_forward(5);
+//void basic_mobility_milestone(void) {
+//    drive_forward(5);
+//    turn_right();
+//    drive_forward(5);
+//    turn_180();
+//    drive_forward(5);
+//}
+
+void ball_drop(void){
+    //we might need to move forward or back a bit first to get it to turn to the right spot
+    if (QRDB > THRESHOLD){
+        turn_left(); // this will put the back over the right basket
+        servo_angle(1000); // set angle to open the ball
+        int delay = 0;
+        while (delay != 65000){ //this is to give the ball time to fall. we might have to make it longer.
+            delay ++;
+        }
+        turn_right();
+    }
+    else{
+        turn_right();// this will set the back over the left basket
+        servo_angle(1000); // set angle to open the ball
+        int delay = 0; 
+        while (delay != 65000){ //this is to give the ball time to fall. we might have to make it longer.
+            delay ++;
+        }
+        turn_left();
+    }
 }
