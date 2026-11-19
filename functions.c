@@ -93,12 +93,12 @@ void drive_backward(float inches)
 // (3.14159 * 10.35 / 4) * 17.56 = 143 steps   <-- tune on the floor
 void turn_left(void)    // left wheel back, right wheel forward
 {
-    move(0, 1, 143);
+    move(0, 1, 315);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
-    move(1, 0, 143);
+    move(1, 0, 300);
 }
 
 void turn_180(void) {

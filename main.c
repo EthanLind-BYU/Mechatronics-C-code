@@ -114,7 +114,8 @@ int main(void)
                line_follow_check();
                  if (QRDL >= THRESHOLD && QRDM >= THRESHOLD && QRDR >= THRESHOLD) // checks for the end of the line 
                    {
-                     state = CANYON;
+                    drive_forward(7);
+                    state = CANYON;
                    }
                 break;
 
@@ -167,14 +168,14 @@ int main(void)
                 break;
 
             case CANYON:
-                if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && LEFT_WALL == 1) {// checks for the start of the line 
-                    drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
+                if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && LEFT_WALL == 0) {// checks for the start of the line 
+                    drive_forward(7); // align the line from the qrd sensors to wheel "axle"
                     turn_right();
                     accelerate(1); // set both wheels forward again
                     state = LINE_FOLLOWING;
                 }
-                else if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && RIGHT_WALL == 1) {// checks for the start of the line 
-                    drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
+                else if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && RIGHT_WALL == 0) {// checks for the start of the line 
+                    drive_forward(7); // align the line from the qrd sensors to wheel "axle"
                     turn_left();
                     accelerate(1); // set both wheels forward again
                     state = LINE_FOLLOWING;
