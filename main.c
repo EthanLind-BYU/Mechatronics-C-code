@@ -7,7 +7,7 @@
 #include "lineFollow.h"
 #include "interrupts.h"
 #include "canyon.h"
-// Configuration bits for the PIC24F16KA301.
+// Configuration bits for thePIC24F16KA301.
 #pragma config FNOSC = FRC      // 8 MHz internal oscillator
 #pragma config POSCMOD = NONE   // No external crystal, frees RA2/RA3 for I/O
 #pragma config OSCIOFNC = OFF   // RA3 is normal I/O instead of clock output
@@ -65,13 +65,16 @@ int main(void)
     // OC1CON2 = 0x001F;
 
     // Initialize the state
-    state = LOOKING_FOR_LINE;
+//    state = LOOKING_FOR_LINE;
+//    state = LASER_POINTING;
+    state = LINE_FOLLOWING;
+//    servo_angle(0);
+//    LASER = 0;
     accelerate(1,1,7500);//sets to forward and the a speed of 7500
     static int ball_dropped = 0;
     static int ball_recieved = 0;
-
-
-   
+    int qrdb = 0;
+    
     while (1) {
         switch (state){
 
@@ -92,40 +95,40 @@ int main(void)
             
             case LINE_FOLLOWING:
                line_follow_check();
-               if (QRDL >= THRESHOLD && QRDM >= THRESHOLD && QRDR >= THRESHOLD) // checks for the end of the line 
-                   {
-                    drive_forward(7);
-                    state = CANYON;
-                   }
+               if (QRDB < 1500)
+               {qrdb = 1;}               
+//               if (QRDL >= THRESHOLD && QRDM >= THRESHOLD && QRDR >= THRESHOLD) // checks for the end of the line 
+//                   {
+//                     state = CANYON;
+//                   }
 //               if (BALL_SENSOR && !ball_recieved) {
 //                   pick_up_ball();
 //                   ball_recieved = 1;
 //               }
-//               if (RIGHT_WALL && LEFT_WALL && !ball_dropped){
-//                   ball_drop();
-//                   ball_dropped = 1;
-//               }
-//               if (QRDE > THRESHOLD)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
-//               {
-//                   drive_forward(2);
-//                   turn_right();
-//                   accelerate(0,0,7500);
-//                   drive_backward(21);
-//                   servo_angle(0);
-//                   state = LASER_POINTING;
-//                   
-//               }
+               if (!RIGHT_WALL && !LEFT_WALL && !ball_dropped){
+                   ball_drop(qrdb);
+                   ball_dropped = 1;
+               }
+               if (LAND_SENSOR && ball_dropped)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
+               {
+                   drive_forward(2);
+                   turn_right();
+                   accelerate(0,0,7500);
+                   drive_backward(21);
+                   state = LASER_POINTING;
+                   
+               }
                break;
 
             case CANYON:
-                if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && LEFT_WALL == 0) {// checks for the start of the line 
-                    drive_forward(7); // align the line from the qrd sensors to wheel "axle"
+                if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && LEFT_WALL == 1) {// checks for the start of the line 
+                    drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
                     turn_right();
                     accelerate(1,1,5000); // set both wheels forward again
                     state = LINE_FOLLOWING;
                 }
-                else if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && RIGHT_WALL == 0) {// checks for the start of the line 
-                    drive_forward(7); // align the line from the qrd sensors to wheel "axle"
+                else if (QRDL <= THRESHOLD && QRDM <= THRESHOLD && QRDR <= THRESHOLD && RIGHT_WALL == 1) {// checks for the start of the line 
+                    drive_forward(1.5); // align the line from the qrd sensors to wheel "axle"
                     turn_left();
                     accelerate(1,1,5000); // set both wheels forward again
                     state = LINE_FOLLOWING;
@@ -136,16 +139,27 @@ int main(void)
                 break;
 
             case LASER_POINTING:
-                if (!LASER_SENSOR){
-                    servo_angle(ANGLE+1);
+                R_DC = 0;
+                L_DC = 0;
+                if (!LASER_SENSOR && ANGLE > 4000){
+                    ANGLE = ANGLE -1;
+                    LASER = 1;
                 }
                 else if (LASER_SENSOR){
                     LASER = 1;//set laser to be on (might have to have it repeat in the IDLE state)
                     state = IDLE;
                 }
+                if (ANGLE < 4000){
+                    state = IDLE;
+                    servo_angle(4000);
+                    LASER = 1;
+                }
+                for (volatile long i = 0; i < 500; i++);
+
                 break;
 
             case IDLE:
+                LASER = 1;
                 if (0){
 
                 }
