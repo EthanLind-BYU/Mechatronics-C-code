@@ -55,12 +55,15 @@ void qrd_init(void)
     _TRISB12 = 1;    // Set as input (for the ping pong ball color)
     _ANSB12 = 1;     // Enable pin 15 for analog input (recall setting this 0 enables digital input).    
    // Configure analog pin 17 (AN10 is shared with RB14)
-    _TRISB14 = 1;    // Set as input (for the end line detection)
+    _TRISB14 = 1;    // Set as input (for the satalite detection)
     _ANSB14 = 1;     // Enable pin 18 for analog input (recall setting this 0 enables digital input).
    // Configure analog pin 7 (AN13 is shared with RA2)
-    _TRISA2 = 1;    // Set as input (for the end line detection)
+    _TRISA2 = 1;    // Set as input (for the sample pickup detection)
     _ANSA2 = 1;     // Enable pin 18 for analog input (recall setting this 0 enables digital input).
 
 
     config_ad();    // Configure A/D
+
+
+    return 0;
 }
