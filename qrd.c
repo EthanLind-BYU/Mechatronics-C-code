@@ -24,7 +24,7 @@ void config_ad(void)
                   // location corresponding to channel
     _CSCNA = 1;   // AD1CON2<10> -- Scans inputs specified
                   // in AD1CSSx registers
-    _SMPI = 3;	  // AD1CON2<6:2> -- number of channels sampled -1)
+    _SMPI = 5;	  // AD1CON2<6:2> -- number of channels sampled -1)
                   // to buffer (if sampling 10 channels)
     _ALTS = 0;    // AD1CON2<0> -- Sample MUXA only
     
@@ -34,10 +34,9 @@ void config_ad(void)
                   // period TAD
     _ADCS = 0b00000011;    // AD1CON3<7:0> -- TAD needs to be at least 600 ns. Thus, _ADCS = 0b00000010 will give us the fastest AD clock given a 4 MHz system clock. 0b00000011 is slower than we could go, but still fast enough for our needs.
 
-    AD1CSSL = 0b1001000010011; //chooses with A2D channels you are going to scan 
-    //here we chose 12 for ball and 1,2,4 for line following and 9 for the last line detection
+    AD1CSSL = 0b11010000010011; //chooses with A2D channels you are going to scan 
+    //here we chose 12 for ball and 1,2,4 for line following 10 for the laser and 7 for ball pickup
     _ADON = 1;    // AD1CON1<15> -- Turn on A/D
-
 }
 
 void qrd_init(void)
@@ -55,9 +54,13 @@ void qrd_init(void)
     // Configure analog pin 15 (AN12 is shared with RB12)
     _TRISB12 = 1;    // Set as input (for the ping pong ball color)
     _ANSB12 = 1;     // Enable pin 15 for analog input (recall setting this 0 enables digital input).    
-   // Configure analog pin 18 (AN9 is shared with RB15)
-    _TRISB15 = 1;    // Set as input (for the end line detection)
-    _ANSB15 = 1;     // Enable pin 18 for analog input (recall setting this 0 enables digital input).
+   // Configure analog pin 17 (AN10 is shared with RB14)
+    _TRISB14 = 1;    // Set as input (for the end line detection)
+    _ANSB14 = 1;     // Enable pin 18 for analog input (recall setting this 0 enables digital input).
+   // Configure analog pin 7 (AN13 is shared with RA2)
+    _TRISA2 = 1;    // Set as input (for the end line detection)
+    _ANSA2 = 1;     // Enable pin 18 for analog input (recall setting this 0 enables digital input).
+
 
     config_ad();    // Configure A/D
 
