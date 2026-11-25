@@ -60,7 +60,4 @@ void qrd_init(void)
     _ANSB15 = 1;     // Enable pin 18 for analog input (recall setting this 0 enables digital input).
 
     config_ad();    // Configure A/D
-
-
-    return 0;
 }

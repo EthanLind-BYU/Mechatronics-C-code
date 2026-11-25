@@ -4,9 +4,14 @@
 #include "lineFollow.h"
 #include "qrd.h"
 
-static unsigned int FAST = 5000;// Max speed PWM
-static unsigned int MEDIUM = 7000;
-static unsigned int SLOW = 60000;
+static unsigned int LEFT_FAST = 2900;// Max speed PWM
+static unsigned int LEFT_MEDIUM = 3500;
+static unsigned int LEFT_SLOW = 39000;
+
+static unsigned int RIGHT_FAST = 3000;// Max speed PWM
+static unsigned int RIGHT_MEDIUM = 3500;
+static unsigned int RIGHT_SLOW = 40000;
+
 enum {STRAIGHT, SLOW_RIGHT, FAST_RIGHT, SLOW_LEFT, FAST_LEFT, STOP};
 static int PATH = STRAIGHT;
 
@@ -33,18 +38,18 @@ void line_follow_check() {
 
     switch (PATH) {
         case STRAIGHT:
-            L_MOTOR = FAST;
+            L_MOTOR = LEFT_FAST;
             L_DC = L_MOTOR/2;
-            R_MOTOR = FAST;
+            R_MOTOR = RIGHT_FAST;
             R_DC = R_MOTOR/2;
             if (QRDL > THRESHOLD) {PATH = SLOW_RIGHT;} // less than means it is on the white line
             if (QRDR > THRESHOLD) {PATH = SLOW_LEFT;}
           break;
         case SLOW_RIGHT:
-            R_MOTOR = SLOW;
+            R_MOTOR = RIGHT_SLOW;
             R_DC = R_MOTOR/2;
 //            R_DC = 0;
-            L_MOTOR = MEDIUM;
+            L_MOTOR = LEFT_MEDIUM;
             L_DC = L_MOTOR/2;
     //        if (QRDM > THRESHOLD) {PATH = FAST_RIGHT;}
             if (QRDL < THRESHOLD) {PATH = STRAIGHT;}
@@ -57,9 +62,9 @@ void line_follow_check() {
     //        if (QRDM < THRESHOLD) {PATH = STRAIGHT;}
     //      break;
         case SLOW_LEFT:
-            R_MOTOR = MEDIUM;
+            R_MOTOR = RIGHT_MEDIUM;
             R_DC = R_MOTOR/2;
-            L_MOTOR = SLOW;
+            L_MOTOR = LEFT_SLOW;
             L_DC = L_MOTOR/2;
 //            L_DC = 0;
     //        if (QRDM > THRESHOLD) {PATH = FAST_LEFT;}

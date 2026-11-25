@@ -141,13 +141,13 @@ void servo_angle(int angle)
 void turn_left(void)    // left wheel back, right wheel forward
 {
     accelerate(0,1,10000);
-    move(0, 1, 350);
+    move(0, 1, 700);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
     accelerate(1,0,10000);
-    move(1, 0, 350);
+    move(1, 0, 700);
 }
 
 void turn_180(void) 

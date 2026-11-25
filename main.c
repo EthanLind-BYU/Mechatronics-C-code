@@ -72,7 +72,7 @@ int main(void)
 //    LASER = 0;
     accelerate(1,1,7500);//sets to forward and the a speed of 7500
     static int ball_dropped = 0;
-    static int ball_recieved = 0;
+//    static int ball_recieved = 0; // only used by the commented-out pick_up_ball code below
     int qrdb = 0;
     
     while (1) {
