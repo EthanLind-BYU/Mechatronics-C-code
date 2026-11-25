@@ -74,7 +74,12 @@ int main(void)
     static int ball_dropped = 0;
 //    static int ball_recieved = 0; // only used by the commented-out pick_up_ball code below
     int qrdb = 0;
-    laser_sensor = 0;
+    int laser_sensor = 0;
+//    int laser_found = 0;
+    for (unsigned long i = 0; i < 300000; i++);
+    int needed_angle = 0;
+    int i = 0;
+
     
     while (1) {
         switch (state){
@@ -110,13 +115,17 @@ int main(void)
                    ball_drop(qrdb);
                    ball_dropped = 1;
                }
-               if (!LAND_SENSOR && ball_dropped)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
+               if (!LAND_SENSOR) // && ball_dropped)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
                {
-                   drive_forward(2);
+                   R_DC = 0;
+                   L_DC = 0;
+                   drive_forward(10);
+                   for (unsigned long i = 0; i < 10000; i++);
                    turn_right();
                    accelerate(0,0,7500);
-                   drive_backward(21);
+                   drive_backward(110);
                    state = LASER_POINTING;
+                   laser_sensor = LASER_DETECT;
                    
                }
                break;
@@ -141,31 +150,34 @@ int main(void)
 
             case LASER_POINTING:
                 R_DC = 0;
-                L_DC = 0;
-                
-                ANGLE--;
-                if (LASER_SENSOR > laser_sensor){
-                    laser_sensor = LASER_SENSOR;
-                } 
-                else if (laser_sensor < LASER_SENSOR - 300);
-                    state = IDLE;
-                    LASER = 1;
+                L_DC = 0;                
+                while(i < 3000){
+                    ANGLE = ANGLE - 1;
+                    if (LASER_DETECT > laser_sensor){
+                        laser_sensor = LASER_DETECT;
+                        needed_angle = ANGLE;
+                    }
+                    i = i+1;
+                    for (unsigned long i = 0; i < 75; i++);
                 }
-//                else if (LASER_SENSOR){
-//                    LASER = 1;//set laser to be on (might have to have it repeat in the IDLE state)
+                servo_angle(needed_angle-500);
+                LASER = 1;
+                state = IDLE;
+
+//                
+//                if (LASER_DETECT > laser_sensor){
+//                    laser_sensor = LASER_DETECT;
+//                    laser_found = 1;
+//                    LASER = 0;
+//                } 
+//                if (laser_found && (laser_sensor-1500) > LASER_DETECT){
 //                    state = IDLE;
-//                }
-//                if (ANGLE < 4000){
-//                    state = IDLE;
-//                    servo_angle(4000);
 //                    LASER = 1;
 //                }
-                for (volatile long i = 0; i < 300; i++);
 
                 break;
 
             case IDLE:
-                LASER = 1;
                 if (0){
 
                 }
