@@ -1,5 +1,3 @@
- // This program reads from an A/D channel in manual mode.
-
 #include <xc.h>
 #ifndef QRD_H
 #define QRD_H
@@ -8,6 +6,7 @@
 #define QRDR ADC1BUF4 //pin6
 #define QRDM ADC1BUF1 //pin3
 #define QRDB ADC1BUF12 //pin15
-#define QRDE ADC1BUF9 //pin18
+#define SAMPLE_SCAN ADC1BUF10 //pin17
+#define LASER_DETECT ADC1BUF13 //pin 7
 void qrd_init(void);
 #endif
