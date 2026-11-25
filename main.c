@@ -141,20 +141,25 @@ int main(void)
             case LASER_POINTING:
                 R_DC = 0;
                 L_DC = 0;
-                if (!LASER_SENSOR && ANGLE > 4000){
-                    ANGLE = ANGLE -1;
+                
+                ANGLE--;
+                if (LASER_SENSOR > laser_sensor){
+                    laser_sensor = LASER_SENSOR;
+                } 
+                else if (laser_sensor < LASER_SENSOR - 300);
+                    state = IDLE;
                     LASER = 1;
                 }
-                else if (LASER_SENSOR){
-                    LASER = 1;//set laser to be on (might have to have it repeat in the IDLE state)
-                    state = IDLE;
-                }
-                if (ANGLE < 4000){
-                    state = IDLE;
-                    servo_angle(4000);
-                    LASER = 1;
-                }
-                for (volatile long i = 0; i < 500; i++);
+//                else if (LASER_SENSOR){
+//                    LASER = 1;//set laser to be on (might have to have it repeat in the IDLE state)
+//                    state = IDLE;
+//                }
+//                if (ANGLE < 4000){
+//                    state = IDLE;
+//                    servo_angle(4000);
+//                    LASER = 1;
+//                }
+                for (volatile long i = 0; i < 300; i++);
 
                 break;
 
