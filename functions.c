@@ -32,7 +32,7 @@ void motors_init(void)
     R_DC = 0;
     
     SERVO = 65000;
-    ANGLE = 7500;
+    ANGLE = 7250;
     
     _TRISB15 = 1;  // pin 18, final lander sensor
 
@@ -128,6 +128,8 @@ void servo_angle(int angle)
     }
 }
 
+
+
 //void laser_search(void) {
 //    int angle = ANGLE+1;
 //    if (LASER_SENSOR){
@@ -141,13 +143,13 @@ void servo_angle(int angle)
 void turn_left(void)    // left wheel back, right wheel forward
 {
     accelerate(0,1,10000);
-    move(0, 1, 700);
+    move(0, 1, 350);
 }
 
 void turn_right(void)   // left wheel forward, right wheel back
 {
     accelerate(1,0,10000);
-    move(1, 0, 700);
+    move(1, 0, 605);
 }
 
 void turn_180(void) 
@@ -186,7 +188,7 @@ void ball_drop(int qrdb){
         for (volatile long i = 0; i < 1000; i++);
             delay ++;
         }
-        servo_angle(7500);    
+        servo_angle(6250);    
 
 //        servo_angle = 6000 //in case we need to set it to be lower again for the purpose of the laser.
         turn_right();
@@ -200,7 +202,7 @@ void ball_drop(int qrdb){
 
             delay ++;
         }
-        servo_angle(7500);    
+        servo_angle(6250);    
         turn_left();
     }
     accelerate(1,1,0);
