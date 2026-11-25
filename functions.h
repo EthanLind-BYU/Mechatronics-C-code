@@ -14,7 +14,9 @@
 #define R_MOTOR    OC3RS   // Right motor period (sets speed, bigger = slower)
 #define R_DC       OC3R    // Right motor duty cycle (0 = stopped, R_MOTOR/2 = running)
 #define SERVO      OC1RS   // Servo Motor PWM on pin 14
-#define ANGLE      OC1R    // Servo Motor Anle
+#define ANGLE      OC1R    // Servo Motor Angle
+#define LAND_SENSOR (_RB15 == 1)   // pin 18 for the outer sensor.
+
 
 // for the servo motors and angles, to get the 20ms suggestion for PWM, we would need a postscalor
 // so we can try to figure out how to get the postscaler to apply to just this, or make all of our other numbers smaller as well.
@@ -34,9 +36,9 @@ void drive_backward(float inches);
 void turn_180(void);
 void pick_up_ball(void);
 void basic_mobility_milestone(void);
-void accelerate(int direction);
+void accelerate(int left, int right, int pwm_input);
 void servo_angle(int angle);
 //void laser_search(void);
-void ball_drop(void);
+void ball_drop(int qrdb);
 
 #endif
