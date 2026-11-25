@@ -4,13 +4,13 @@
 #include "lineFollow.h"
 #include "qrd.h"
 
-static unsigned int LEFT_FAST = 2900;// Max speed PWM
+static unsigned int LEFT_FAST = 2900 + 400;// Max speed PWM
 static unsigned int LEFT_MEDIUM = 3500;
-static unsigned int LEFT_SLOW = 39000;
+static unsigned int LEFT_SLOW = 39000 + 400;
 
-static unsigned int RIGHT_FAST = 3000;// Max speed PWM
+static unsigned int RIGHT_FAST = 3200 + 400;// Max speed PWM
 static unsigned int RIGHT_MEDIUM = 3500;
-static unsigned int RIGHT_SLOW = 40000;
+static unsigned int RIGHT_SLOW = 42000 + 400;
 
 enum {STRAIGHT, SLOW_RIGHT, FAST_RIGHT, SLOW_LEFT, FAST_LEFT, STOP};
 static int PATH = STRAIGHT;

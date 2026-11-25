@@ -22,7 +22,7 @@
 // so we can try to figure out how to get the postscaler to apply to just this, or make all of our other numbers smaller as well.
 
 //Speed: 2 rev/s = 400 steps/s -> 4,000,000 / 400 
-#define PWM_PERIOD  15000 // controls speed in canyon,and any other move functions
+#define PWM_PERIOD  3500 // controls speed in canyon,and any other move functions
 #define BALL_SENSOR PORTBbits.RB14 //setup for pin 17 
 #define LASER_SENSOR PORTAbits.RA2 //setup for pin 7
 #define LASER LATAbits.LATA3 //pin 8 setup to power laser

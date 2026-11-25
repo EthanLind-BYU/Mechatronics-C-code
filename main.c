@@ -109,7 +109,7 @@ int main(void)
                    ball_drop(qrdb);
                    ball_dropped = 1;
                }
-               if (LAND_SENSOR && ball_dropped)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
+               if (!LAND_SENSOR && ball_dropped)//an idea we could add if necessary, have it report when each task is complete, so that if it misreads it knows if the ball has been dropped and the canyon has happened.
                {
                    drive_forward(2);
                    turn_right();
